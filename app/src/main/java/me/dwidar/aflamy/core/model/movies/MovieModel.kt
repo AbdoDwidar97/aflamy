@@ -1,8 +1,10 @@
 package me.dwidar.aflamy.core.model.movies
 
+import me.dwidar.aflamy.core.model.common.BaseModel
+
 data class MovieModel(
     val adult: Boolean =  false,
-    val backdropPath: String? = null,
+    val backdropPath: String = "",
     val genreIds: List<Int> = mutableListOf(),
     val id: Int = -1,
     val originalLanguage: String = "",
@@ -15,4 +17,4 @@ data class MovieModel(
     val video: Boolean = false,
     val voteAverage: Double = 0.0,
     val voteCount: Int = 0
-)
+): BaseModel()

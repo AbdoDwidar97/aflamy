@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -69,10 +70,15 @@ fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
 
                 Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
 
-                MoviesCollection(
-                    moviesGroup = state.value.moviesGroupByYears,
-                    yearsList = state.value.descendingYears
-                )
+                if (!state.value.isLoading){
+                    MoviesCollection(
+                        moviesGroup = state.value.moviesGroupByYears,
+                        yearsList = state.value.descendingYears
+                    )
+                }else Column (modifier = Modifier.fillMaxSize()){
+                    CircularProgressIndicator()
+                }
+
             }
         }
     }
