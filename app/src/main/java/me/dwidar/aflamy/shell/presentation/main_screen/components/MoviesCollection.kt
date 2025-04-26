@@ -11,11 +11,11 @@ import me.dwidar.aflamy.core.model.movies.MovieModel
 import me.dwidar.aflamy.shell.configs.getHeightUnit
 
 @Composable
-fun MoviesCollection(moviesGroup: HashMap<Int, MutableList<MovieModel>>, yearsList: List<Int>) {
+fun MoviesCollection(moviesGroup: HashMap<Int, MutableList<MovieModel>>, yearsList: List<Int>, onCardClick: ()-> Unit) {
 
     LazyColumn (modifier = Modifier.fillMaxSize()){
         items(count = yearsList.size) { idx ->
-            MoviesGroupItemByYear(yearsList[idx], movies = moviesGroup[yearsList[idx]] ?: listOf())
+            MoviesGroupItemByYear(yearsList[idx], movies = moviesGroup[yearsList[idx]] ?: listOf(), onCardClick = onCardClick)
             Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
         }
     }

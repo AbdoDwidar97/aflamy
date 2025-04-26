@@ -1,6 +1,7 @@
 package me.dwidar.aflamy.shell.presentation.main_screen.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,13 +28,16 @@ import me.dwidar.aflamy.shell.configs.screenHeight
 import me.dwidar.aflamy.shell.configs.screenWidth
 
 @Composable
-fun MovieCard(movie: MovieModel) {
+fun MovieCard(movie: MovieModel, onCardClick: ()-> Unit) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(cardRoundedCorner))
             .height((screenHeight() * 0.3).dp)
             .width((screenWidth() * 0.45).dp)
             .background(cardBackgroundColor)
+            .clickable {
+                onCardClick()
+            }
     ) {
         Column (verticalArrangement = Arrangement.SpaceBetween){
             AsyncImage(

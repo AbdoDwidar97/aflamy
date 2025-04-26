@@ -1,5 +1,6 @@
 package me.dwidar.aflamy.shell.presentation.main_screen
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,8 +28,11 @@ import me.dwidar.aflamy.shell.configs.spacerHeight
 import me.dwidar.aflamy.shell.presentation.common.AflamySearchBar
 import me.dwidar.aflamy.shell.presentation.main_screen.components.MoviesCollection
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import me.dwidar.aflamy.core.presentation.main_screen.MainScreenIntent
+import me.dwidar.aflamy.shell.presentation.movie_details.MovieDetailsActivity
 
 
 class MainActivity : ComponentActivity() {
@@ -46,6 +50,8 @@ fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
     val state = viewModel.state.collectAsState()
 
     viewModel.onIntent(MainScreenIntent.GetPopularMovies)
+
+    val context = LocalContext.current
 
     AflamyTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
@@ -74,8 +80,11 @@ fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
                     MoviesCollection(
                         moviesGroup = state.value.moviesGroupByYears,
                         yearsList = state.value.descendingYears
-                    )
-                }else Column (modifier = Modifier.fillMaxSize()){
+                    ){
+                        val intent = Intent(context, MovieDetailsActivity::class.java)
+                        context.startActivity(intent)
+                    }
+                }else Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){
                     CircularProgressIndicator()
                 }
 
