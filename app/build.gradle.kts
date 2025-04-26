@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.coil.compose)
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

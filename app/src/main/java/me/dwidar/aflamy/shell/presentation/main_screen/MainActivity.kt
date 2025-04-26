@@ -19,11 +19,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import me.dwidar.aflamy.core.presentation.main_screen.MainScreenViewModel
 import me.dwidar.aflamy.shell.configs.AflamyTheme
 import me.dwidar.aflamy.shell.configs.getGeneralHorizontalPadding
 import me.dwidar.aflamy.shell.configs.spacerHeight
 import me.dwidar.aflamy.shell.presentation.common.AflamySearchBar
 import me.dwidar.aflamy.shell.presentation.main_screen.components.MoviesCollection
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import me.dwidar.aflamy.core.presentation.main_screen.MainScreenIntent
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +41,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainPage() {
+fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
+    val state = viewModel.state.collectAsState()
+
+    viewModel.onIntent(MainScreenIntent.GetPopularMovies)
+
     AflamyTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
             Column (
@@ -60,7 +69,10 @@ fun MainPage() {
 
                 Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
 
-                MoviesCollection()
+                MoviesCollection(
+                    moviesGroup = state.value.moviesGroupByYears,
+                    yearsList = state.value.descendingYears
+                )
             }
         }
     }
