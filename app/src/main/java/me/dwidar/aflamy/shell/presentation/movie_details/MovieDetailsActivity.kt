@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,10 +21,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,14 +32,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import me.dwidar.aflamy.core.model.casts.CastMemberModel
 import me.dwidar.aflamy.core.model.movies.MovieDetailsModel
 import me.dwidar.aflamy.core.model.movies.MovieModel
 import me.dwidar.aflamy.shell.configs.AflamyTheme
@@ -52,13 +47,11 @@ import me.dwidar.aflamy.shell.configs.getHeightUnit
 import me.dwidar.aflamy.shell.configs.getWidthUnit
 import me.dwidar.aflamy.shell.configs.hintColor
 import me.dwidar.aflamy.shell.configs.screenHeight
-import me.dwidar.aflamy.shell.configs.screenWidth
-import me.dwidar.aflamy.shell.configs.spacerHeight
-import me.dwidar.aflamy.shell.configs.white
+import me.dwidar.aflamy.shell.presentation.common.ParagraphLabel
 import me.dwidar.aflamy.shell.presentation.common.PrimaryButton
-import me.dwidar.aflamy.shell.presentation.main_screen.components.MovieCard
-import me.dwidar.aflamy.shell.presentation.main_screen.components.MoviesCollection
-import me.dwidar.aflamy.shell.presentation.movie_details.components.SimilarMoviesList
+import me.dwidar.aflamy.shell.presentation.common.RowLabel
+import me.dwidar.aflamy.shell.presentation.movie_details.components.CastCard
+import me.dwidar.aflamy.shell.presentation.common.NormalMoviesList
 
 class MovieDetailsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,7 +91,19 @@ fun MovieDetailsPage() {
             posterPath = "https://image.tmdb.org/t/p/w500/xUkUZ8eOnrOnnJAfusZUqKYZiDu.jpg"
         )
     )
-    
+
+    val dirs: MutableList<CastMemberModel> = mutableListOf()
+    dirs.add(CastMemberModel(
+        name = "Jack Quaid",
+        profilePath = "https://image.tmdb.org/t/p/w500/320qW5yEbxpmyxQ3evmClJbtKag.jpg",
+        knownForDepartment = "Actor"
+    ))
+    dirs.add(CastMemberModel(
+        name = "Amber Midthunder",
+        profilePath = "https://image.tmdb.org/t/p/w500/f8VWGyaIS38NkDIzQ2hapXKt0N5.jpg",
+        knownForDepartment = "Actor"
+    ))
+
     val movie = MovieDetailsModel(
         title = "Novocaine",
         releaseDate = "2025-03-26",
@@ -156,29 +161,17 @@ fun MovieDetailsPage() {
                 Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
 
                 Row (modifier = Modifier.fillMaxWidth()) {
-                    
-                    /// Release Date
-                    Row {
-                        Text("Release: ", style = MaterialTheme.typography.titleSmall.copy(color = hintColor))
-                        Text(movie.releaseDate, style = MaterialTheme.typography.titleSmall)
-                    }
+
+                    RowLabel(title = "Release: ", value = movie.releaseDate)
 
                     Spacer(modifier = Modifier.width((getWidthUnit() * 6).dp))
 
-                    /// Status
-                    Row {
-                        Text("Status: ", style = MaterialTheme.typography.titleSmall.copy(color = hintColor))
-                        Text(movie.status, style = MaterialTheme.typography.titleSmall)
-                    }
+                    RowLabel(title = "Status: ", value = movie.status)
                 }
 
                 Spacer(modifier = Modifier.height(getHeightUnit().dp))
 
-                /// Revenue
-                Row {
-                    Text("Revenue: ", style = MaterialTheme.typography.titleSmall.copy(color = hintColor))
-                    Text("$${movie.revenue.toUInt()}", style = MaterialTheme.typography.titleSmall)
-                }
+                RowLabel(title = "Revenue: ", value = "$${movie.revenue.toUInt()}")
 
                 Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
 
@@ -186,11 +179,7 @@ fun MovieDetailsPage() {
 
                 Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
 
-                Text("Overview", style = MaterialTheme.typography.titleMedium)
-
-                Spacer(modifier = Modifier.height(getHeightUnit().dp))
-
-                Text(movie.overview, style = MaterialTheme.typography.labelMedium.copy(color = hintColor))
+                ParagraphLabel(title = "Overview", content = movie.overview)
 
                 Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
 
@@ -201,11 +190,7 @@ fun MovieDetailsPage() {
 
                 Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
 
-                Text("Similar Movies", style = MaterialTheme.typography.titleMedium)
-
-                Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
-
-                SimilarMoviesList(movies = similar) { }
+                SimilarMoviesSection(similar = similar)
 
                 Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
 
@@ -216,10 +201,62 @@ fun MovieDetailsPage() {
 
                 Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
 
-                Text("Cast & Crew", style = MaterialTheme.typography.titleMedium)
+                CastsSection(directors = dirs, actors = dirs)
 
-                Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
+                Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
             }
+        }
+    }
+}
+
+
+@Composable
+fun SimilarMoviesSection(similar: List<MovieModel>)
+{
+    Column {
+        Text("Similar Movies", style = MaterialTheme.typography.titleMedium)
+
+        Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
+
+        NormalMoviesList(movies = similar) { }
+    }
+}
+
+@Composable
+fun CastsSection(directors: List<CastMemberModel>, actors: List<CastMemberModel>)
+{
+    Column {
+        Text("Cast & Crew", style = MaterialTheme.typography.titleMedium)
+
+        Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
+
+        Text("Top Directors", style = MaterialTheme.typography.titleMedium)
+
+        Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
+
+        CastList(casts = directors)
+
+        Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
+
+        Text("Top Actors", style = MaterialTheme.typography.titleMedium)
+
+        Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
+
+        CastList(casts = directors)
+    }
+}
+
+@Composable
+fun CastList(casts: List<CastMemberModel>)
+{
+    FlowRow(
+        maxItemsInEachRow = 2,
+        verticalArrangement = Arrangement.spacedBy(getHeightUnit().dp),
+        horizontalArrangement = Arrangement.spacedBy((getWidthUnit() * 2).dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        repeat(casts.size) {idx ->
+            CastCard(casts[idx])
         }
     }
 }

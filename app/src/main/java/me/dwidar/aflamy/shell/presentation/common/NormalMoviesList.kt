@@ -1,4 +1,4 @@
-package me.dwidar.aflamy.shell.presentation.movie_details.components
+package me.dwidar.aflamy.shell.presentation.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
@@ -12,7 +12,7 @@ import me.dwidar.aflamy.shell.configs.getWidthUnit
 import me.dwidar.aflamy.shell.presentation.main_screen.components.MovieCard
 
 @Composable
-fun SimilarMoviesList(movies: List<MovieModel>, onCardClick: () -> Unit)
+fun NormalMoviesList(movies: List<MovieModel>, onCardClick: () -> Unit)
 {
     FlowRow(
         maxItemsInEachRow = 2,
