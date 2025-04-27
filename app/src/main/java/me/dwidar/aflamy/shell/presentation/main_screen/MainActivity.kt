@@ -80,8 +80,10 @@ fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
                     MoviesCollection(
                         moviesGroup = state.value.moviesGroupByYears,
                         yearsList = state.value.descendingYears
-                    ){
-                        val intent = Intent(context, MovieDetailsActivity::class.java)
+                    ){ movieId ->
+                        val intent = Intent(context, MovieDetailsActivity::class.java).apply {
+                            putExtra("movie_id", movieId)
+                        }
                         context.startActivity(intent)
                     }
                 }else Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){

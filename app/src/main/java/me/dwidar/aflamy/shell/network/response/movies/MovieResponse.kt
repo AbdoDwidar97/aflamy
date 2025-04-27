@@ -34,7 +34,9 @@ data class MovieResponse(
             originalTitle = originalTitle ?: "",
             overview = overview ?: "",
             popularity = popularity ?: 0.0,
-            posterPath = (baseCardImageURL + posterPath) ?: "",
+            posterPath = if (posterPath != null) {
+                baseCardImageURL + posterPath
+            } else "",
             releaseDate = releaseDate ?: "",
             title = title ?: "",
             video = video ?: false,

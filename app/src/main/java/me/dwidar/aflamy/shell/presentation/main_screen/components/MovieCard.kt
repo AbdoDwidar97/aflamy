@@ -28,7 +28,7 @@ import me.dwidar.aflamy.shell.configs.screenHeight
 import me.dwidar.aflamy.shell.configs.screenWidth
 
 @Composable
-fun MovieCard(movie: MovieModel, onCardClick: ()-> Unit) {
+fun MovieCard(movie: MovieModel, onCardClick: (movieId: Int) -> Unit) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(cardRoundedCorner))
@@ -36,7 +36,7 @@ fun MovieCard(movie: MovieModel, onCardClick: ()-> Unit) {
             .width((screenWidth() * 0.45).dp)
             .background(cardBackgroundColor)
             .clickable {
-                onCardClick()
+                onCardClick(movie.id)
             }
     ) {
         Column (verticalArrangement = Arrangement.SpaceBetween){

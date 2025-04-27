@@ -12,7 +12,7 @@ import me.dwidar.aflamy.shell.configs.getWidthUnit
 import me.dwidar.aflamy.shell.presentation.main_screen.components.MovieCard
 
 @Composable
-fun NormalMoviesList(movies: List<MovieModel>, onCardClick: () -> Unit)
+fun NormalMoviesList(movies: List<MovieModel>, onCardClick: (movieId: Int) -> Unit)
 {
     FlowRow(
         maxItemsInEachRow = 2,

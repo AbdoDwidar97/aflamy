@@ -16,7 +16,7 @@ import me.dwidar.aflamy.shell.configs.getHeightUnit
 import me.dwidar.aflamy.shell.configs.getWidthUnit
 
 @Composable
-fun MoviesGroupItemByYear(year: Int, movies: List<MovieModel>, onCardClick: ()-> Unit) {
+fun MoviesGroupItemByYear(year: Int, movies: List<MovieModel>, onCardClick: (movieId: Int) -> Unit) {
     Column {
         Text(text = year.toString(), style = MaterialTheme.typography.titleMedium)
 

@@ -32,6 +32,25 @@ class MoviesRepoImpl : MoviesRepo
         return Result.failure(Exception("Something went wrong"))
     }
 
+    override suspend fun getSimilarMovies(movieId: Int): Result<ListResultModel<MovieModel>> {
+        val requestExecutor = RequestExecutor<ListResultResponse<MovieResponse, MovieModel>>()
+        val result = requestExecutor.execute {
+            RetrofitInstance.api.getSimilarMovies(RetrofitInstance.apiToken, movieId = movieId)
+        }
+
+        result.onSuccess {
+            return Result.success(it.convertToModel().also { mdl ->
+                it.results?.forEach {
+                    mdl.results.add(it.convertToModel())
+                }
+            })
+        }.onFailure {
+            return Result.failure(it)
+        }
+
+        return Result.failure(Exception("Something went wrong"))
+    }
+
     override suspend fun getMovieDetails(movieId: Int): Result<MovieDetailsModel> {
         val requestExecutor = RequestExecutor<MovieDetailsResponse>()
         val result = requestExecutor.execute {

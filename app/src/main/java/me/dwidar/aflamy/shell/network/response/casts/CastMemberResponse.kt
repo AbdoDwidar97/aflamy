@@ -2,6 +2,7 @@ package me.dwidar.aflamy.shell.network.response.casts
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import me.dwidar.aflamy.core.configs.baseSmallImageURL
 import me.dwidar.aflamy.core.model.casts.CastMemberModel
 import me.dwidar.aflamy.shell.network.response.common.BaseResponse
 
@@ -29,7 +30,9 @@ data class CastMemberResponse(
             name = name ?: "",
             originalName = originalName ?: "",
             popularity = popularity ?: 0.0,
-            profilePath = profilePath ?: "",
+            profilePath = if (profilePath != null) {
+                baseSmallImageURL + profilePath
+            } else "",
             castId = castId ?: -1,
             character = character ?: "",
             creditId = creditId ?: "",
