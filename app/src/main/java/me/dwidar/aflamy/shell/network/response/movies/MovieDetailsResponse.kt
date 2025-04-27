@@ -2,7 +2,7 @@ package me.dwidar.aflamy.shell.network.response.movies
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import me.dwidar.aflamy.core.configs.baseCardImageURL
+import me.dwidar.aflamy.core.configs.baseBannerImageURL
 import me.dwidar.aflamy.core.model.movies.MovieDetailsModel
 import me.dwidar.aflamy.shell.network.response.common.BaseResponse
 
@@ -40,7 +40,7 @@ data class MovieDetailsResponse(
             originalTitle = originalTitle.orEmpty(),
             overview = overview.orEmpty(),
             popularity = popularity ?: 0.0,
-            posterPath = (baseCardImageURL + (posterPath.orEmpty())),
+            posterPath = (baseBannerImageURL + (posterPath.orEmpty())),
             releaseDate = releaseDate.orEmpty(),
             title = title.orEmpty(),
             video = video ?: false,
