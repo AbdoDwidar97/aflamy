@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.dwidar.aflamy.core.model.movies.MovieModel
+import me.dwidar.aflamy.core.repo.movies_repo.MoviesRepo
 import me.dwidar.aflamy.shell.repo.movies_repo.MoviesRepoImpl
 
-class MainScreenViewModel : ViewModel()
+class MainScreenViewModel(private val moviesRepo: MoviesRepo = MoviesRepoImpl()) : ViewModel()
 {
     private val _state = MutableStateFlow(MainScreenState())
     val state: StateFlow<MainScreenState> = _state
-    private val moviesRepo = MoviesRepoImpl()
     private var getMoviesSearchResultJob: Job? = null
 
     fun onIntent(intent: MainScreenIntent) {
