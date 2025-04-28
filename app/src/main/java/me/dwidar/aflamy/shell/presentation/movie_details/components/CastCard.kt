@@ -1,59 +1,64 @@
-package me.dwidar.aflamy.shell.presentation.main_screen.components
+package me.dwidar.aflamy.shell.presentation.movie_details.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import me.dwidar.aflamy.core.model.movies.MovieModel
+import me.dwidar.aflamy.core.model.casts.CastMemberModel
 import me.dwidar.aflamy.shell.configs.cardBackgroundColor
 import me.dwidar.aflamy.shell.configs.cardRoundedCorner
-import me.dwidar.aflamy.shell.configs.getGeneralHorizontalPadding
 import me.dwidar.aflamy.shell.configs.getHeightUnit
+import me.dwidar.aflamy.shell.configs.getWidthUnit
 import me.dwidar.aflamy.shell.configs.screenHeight
 import me.dwidar.aflamy.shell.configs.screenWidth
 
 @Composable
-fun MovieCard(movie: MovieModel, onCardClick: (movieId: Int) -> Unit) {
+fun CastCard(castMember: CastMemberModel)
+{
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(cardRoundedCorner))
-            .height((screenHeight() * 0.3).dp)
             .width((screenWidth() * 0.45).dp)
             .background(cardBackgroundColor)
-            .clickable {
-                onCardClick(movie.id)
-            }
     ) {
-        Column (verticalArrangement = Arrangement.SpaceBetween){
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(vertical = getHeightUnit().dp, horizontal = getWidthUnit().dp)){
             AsyncImage(
-                model = movie.posterPath,
+                model = castMember.profilePath,
                 contentDescription = "Example image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .height((screenHeight() * 0.23).dp)
-                    .clip(RoundedCornerShape(topStart = cardRoundedCorner, topEnd = cardRoundedCorner))
+                    .size((screenHeight() * screenWidth() * 0.00017).dp)
+                    .clip(CircleShape)
             )
 
-            Column (modifier = Modifier.padding(horizontal = getGeneralHorizontalPadding())){
-                Spacer(modifier = Modifier.height(getHeightUnit().dp))
+            Spacer(modifier = Modifier.width((getWidthUnit() * 4).dp))
 
+            Column (
+                modifier = Modifier
+                    .padding(horizontal = (getWidthUnit() * 2).dp),
+                verticalArrangement = Arrangement.Center){
                 Text(
-                    text = movie.title,
+                    text = castMember.name,
                     style = MaterialTheme.typography.labelLarge,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
@@ -62,7 +67,7 @@ fun MovieCard(movie: MovieModel, onCardClick: (movieId: Int) -> Unit) {
                 Spacer(modifier = Modifier.height(getHeightUnit().dp))
 
                 Text(
-                    text = movie.releaseDate.split("-")[0],
+                    text = castMember.knownForDepartment,
                     style = MaterialTheme.typography.labelSmall,
                 )
             }

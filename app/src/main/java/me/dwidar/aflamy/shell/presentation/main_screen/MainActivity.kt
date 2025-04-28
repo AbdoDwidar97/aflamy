@@ -1,5 +1,6 @@
 package me.dwidar.aflamy.shell.presentation.main_screen
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,8 +28,11 @@ import me.dwidar.aflamy.shell.configs.spacerHeight
 import me.dwidar.aflamy.shell.presentation.common.AflamySearchBar
 import me.dwidar.aflamy.shell.presentation.main_screen.components.MoviesCollection
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import me.dwidar.aflamy.core.presentation.main_screen.MainScreenIntent
+import me.dwidar.aflamy.shell.presentation.movie_details.MovieDetailsActivity
 
 
 class MainActivity : ComponentActivity() {
@@ -45,6 +50,8 @@ fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
     val state = viewModel.state.collectAsState()
 
     viewModel.onIntent(MainScreenIntent.GetPopularMovies)
+
+    val context = LocalContext.current
 
     AflamyTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
@@ -69,10 +76,20 @@ fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
 
                 Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
 
-                MoviesCollection(
-                    moviesGroup = state.value.moviesGroupByYears,
-                    yearsList = state.value.descendingYears
-                )
+                if (!state.value.isLoading){
+                    MoviesCollection(
+                        moviesGroup = state.value.moviesGroupByYears,
+                        yearsList = state.value.descendingYears
+                    ){ movieId ->
+                        val intent = Intent(context, MovieDetailsActivity::class.java).apply {
+                            putExtra("movie_id", movieId)
+                        }
+                        context.startActivity(intent)
+                    }
+                }else Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){
+                    CircularProgressIndicator()
+                }
+
             }
         }
     }

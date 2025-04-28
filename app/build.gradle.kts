@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id ("kotlin-kapt")
 }
 
 android {
@@ -51,7 +52,17 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.coil.compose)
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
+
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+
+    implementation(libs.moshi)
+
+    implementation (libs.moshi.kotlin)
+    implementation (libs.converter.moshi)
+
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
