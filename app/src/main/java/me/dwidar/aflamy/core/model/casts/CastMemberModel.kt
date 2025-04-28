@@ -12,7 +12,7 @@ data class CastMemberModel(
     val adult: Boolean = false,
     val gender: Int = 2,
     val id: Int = -1,
-    val knownForDepartment: DepartmentType = DepartmentType.Acting,
+    val knownForDepartment: DepartmentType = DepartmentType.UnKnown,
     val name: String = "",
     val originalName: String = "",
     val popularity: Double = 0.0,

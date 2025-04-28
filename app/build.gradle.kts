@@ -62,6 +62,8 @@ dependencies {
     implementation (libs.moshi.kotlin)
     implementation (libs.converter.moshi)
 
+    implementation(libs.library.base)
+
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 
     testImplementation(libs.junit)
