@@ -67,7 +67,7 @@ fun CastCard(castMember: CastMemberModel)
                 Spacer(modifier = Modifier.height(getHeightUnit().dp))
 
                 Text(
-                    text = castMember.knownForDepartment,
+                    text = castMember.knownForDepartment.name,
                     style = MaterialTheme.typography.labelSmall,
                 )
             }

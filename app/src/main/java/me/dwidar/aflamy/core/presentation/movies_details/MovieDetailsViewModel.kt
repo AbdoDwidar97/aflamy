@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import me.dwidar.aflamy.core.model.casts.CastMemberModel
+import me.dwidar.aflamy.core.model.casts.DepartmentType
 import me.dwidar.aflamy.shell.repo.casts_repo.CastsRepoImpl
 import me.dwidar.aflamy.shell.repo.movies_repo.MoviesRepoImpl
 
@@ -60,10 +62,11 @@ class MovieDetailsViewModel : ViewModel()
             moviesRepo.getSimilarMovies(movieId = movieId)
                 .onSuccess { result ->
 
+                    val maxIdx = result.results.size.coerceAtMost(5)
                     _state.update {
                         it.copy(
                             numberOfRequests = _state.value.numberOfRequests - 1,
-                            similarMovies = result.results.subList(0, 5)
+                            similarMovies = result.results.subList(0, maxIdx)
                         )
                     }
                 }
@@ -85,10 +88,14 @@ class MovieDetailsViewModel : ViewModel()
             castsRepo.getCasts(movieId = movieId)
                 .onSuccess { result ->
 
+                    val actors = result.castList
+                    val crew = result.crewList
+
                     _state.update {
                         it.copy(
                             numberOfRequests = _state.value.numberOfRequests - 1,
-                            casts = result.castList.subList(0, 5)
+                            actorsCast = getCastsWithDescendingPopularity(casts = result.castList as MutableList<CastMemberModel>, departmentType = DepartmentType.Acting),
+                            directorsCast = getCastsWithDescendingPopularity(casts = result.crewList as MutableList<CastMemberModel>, departmentType = DepartmentType.Directing)
                         )
                     }
                 }
@@ -98,5 +105,20 @@ class MovieDetailsViewModel : ViewModel()
                     }
                 }
         }
+    }
+
+    private fun getCastsWithDescendingPopularity(casts: MutableList<CastMemberModel>, departmentType: DepartmentType): List<CastMemberModel>
+    {
+        val orderedCastList : MutableList<CastMemberModel> = mutableListOf()
+
+        casts.sortByDescending { cast ->  cast.popularity }
+
+        casts.forEach { cast ->
+            if (cast.knownForDepartment == departmentType)
+                orderedCastList.add(cast)
+            if (orderedCastList.size == 5) return orderedCastList
+        }
+
+        return orderedCastList
     }
 }

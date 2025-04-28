@@ -4,6 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import me.dwidar.aflamy.core.configs.baseSmallImageURL
 import me.dwidar.aflamy.core.model.casts.CastMemberModel
+import me.dwidar.aflamy.core.model.casts.DepartmentType
 import me.dwidar.aflamy.shell.network.response.common.BaseResponse
 
 @JsonClass(generateAdapter = true)
@@ -26,7 +27,13 @@ data class CastMemberResponse(
             adult = adult ?: false,
             gender = gender ?: 0,
             id = id ?: -1,
-            knownForDepartment = knownForDepartment ?: "",
+            knownForDepartment = if (knownForDepartment != null) {
+                try {
+                    DepartmentType.valueOf(knownForDepartment)
+                } catch (e: IllegalArgumentException) {
+                    DepartmentType.UnKnown
+                }
+            } else DepartmentType.UnKnown,
             name = name ?: "",
             originalName = originalName ?: "",
             popularity = popularity ?: 0.0,
