@@ -11,15 +11,14 @@ import me.dwidar.aflamy.core.model.casts.CastMemberModel
 import me.dwidar.aflamy.core.model.casts.DepartmentType
 import me.dwidar.aflamy.core.model.movies.MovieModel
 import me.dwidar.aflamy.shell.local_storage_manager.LocalStorageManagerImpl
+import me.dwidar.aflamy.core.repo.movies_repo.MoviesRepo
 import me.dwidar.aflamy.shell.repo.casts_repo.CastsRepoImpl
 import me.dwidar.aflamy.shell.repo.movies_repo.MoviesRepoImpl
 
-class MovieDetailsViewModel : ViewModel()
+class MovieDetailsViewModel(private val moviesRepo: MoviesRepo = MoviesRepoImpl()) : ViewModel()
 {
     private val _state = MutableStateFlow(MovieDetailsState())
     val state: StateFlow<MovieDetailsState> = _state
-
-    private val moviesRepo = MoviesRepoImpl()
     private val castsRepo = CastsRepoImpl()
     private val localStorageManager = LocalStorageManagerImpl()
 
