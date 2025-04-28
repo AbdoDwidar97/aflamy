@@ -9,5 +9,5 @@ interface MoviesRepo
     suspend fun getPopularMovies(): Result<ListResultModel<MovieModel>>
     suspend fun getSimilarMovies(movieId: Int): Result<ListResultModel<MovieModel>>
     suspend fun getMovieDetails(movieId: Int): Result<MovieDetailsModel>
-    suspend fun getMoviesResult(query: String)
+    suspend fun getMoviesResult(query: String): Result<ListResultModel<MovieModel>>
 }
