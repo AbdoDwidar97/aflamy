@@ -6,8 +6,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import me.dwidar.aflamy.core.model.casts.CastMemberModel
 import me.dwidar.aflamy.core.model.casts.DepartmentType
+import me.dwidar.aflamy.core.model.movies.MovieModel
+import me.dwidar.aflamy.shell.local_storage_manager.LocalStorageManagerImpl
 import me.dwidar.aflamy.shell.repo.casts_repo.CastsRepoImpl
 import me.dwidar.aflamy.shell.repo.movies_repo.MoviesRepoImpl
 
@@ -18,12 +21,14 @@ class MovieDetailsViewModel : ViewModel()
 
     private val moviesRepo = MoviesRepoImpl()
     private val castsRepo = CastsRepoImpl()
+    private val localStorageManager = LocalStorageManagerImpl()
 
     fun onIntent(intent: MovieDetailsIntent) {
         when (intent) {
             is MovieDetailsIntent.OnGetCasts -> onGetCasts(movieId = intent.movieId)
             is MovieDetailsIntent.OnGetMovieDetails -> onGetMovieDetails(movieId = intent.movieId)
             is MovieDetailsIntent.OnGetSimilarMovies -> onGetSimilarMovies(movieId = intent.movieId)
+            is MovieDetailsIntent.OnAddMovieToWatchlist -> onAddMovieToWatchlist()
         }
     }
 
@@ -88,9 +93,6 @@ class MovieDetailsViewModel : ViewModel()
             castsRepo.getCasts(movieId = movieId)
                 .onSuccess { result ->
 
-                    val actors = result.castList
-                    val crew = result.crewList
-
                     _state.update {
                         it.copy(
                             numberOfRequests = _state.value.numberOfRequests - 1,
@@ -120,5 +122,41 @@ class MovieDetailsViewModel : ViewModel()
         }
 
         return orderedCastList
+    }
+
+    private fun onAddMovieToWatchlist()
+    {
+        _state.update {
+            it.copy(numberOfRequests = _state.value.numberOfRequests + 1)
+        }
+
+        viewModelScope.launch {
+            val movie = MovieModel(
+                adult = _state.value.movieDetailsModel.adult,
+                backdropPath = _state.value.movieDetailsModel.backdropPath,
+                id = _state.value.movieDetailsModel.id,
+                originalLanguage = _state.value.movieDetailsModel.originalLanguage,
+                originalTitle = _state.value.movieDetailsModel.originalTitle,
+                overview = _state.value.movieDetailsModel.overview,
+                popularity = _state.value.movieDetailsModel.popularity,
+                posterPath = _state.value.movieDetailsModel.posterPath,
+                releaseDate = _state.value.movieDetailsModel.releaseDate,
+                title = _state.value.movieDetailsModel.title,
+                video = _state.value.movieDetailsModel.video,
+                voteAverage = _state.value.movieDetailsModel.voteAverage,
+                voteCount = _state.value.movieDetailsModel.voteCount,
+            )
+
+            localStorageManager.addMovie(movie = movie)
+
+            runBlocking {
+                val watchlistMap = _state.value.watchlist
+                watchlistMap[movie.id] = movie
+                _state.update {
+                    it.copy(numberOfRequests = _state.value.numberOfRequests - 1, watchlist = watchlistMap)
+                }
+            }
+
+        }
     }
 }

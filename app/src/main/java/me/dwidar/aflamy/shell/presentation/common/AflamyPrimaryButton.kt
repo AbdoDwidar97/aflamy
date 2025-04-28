@@ -15,8 +15,9 @@ import me.dwidar.aflamy.shell.configs.cardRoundedCorner
 import me.dwidar.aflamy.shell.configs.getWidthUnit
 
 @Composable
-fun PrimaryButton(title: String, icon: ImageVector?, onClick: () -> Unit) {
+fun PrimaryButton(title: String, icon: ImageVector?, enabled: Boolean = true, onClick: () -> Unit) {
     Button(
+        enabled = enabled,
         shape = RoundedCornerShape(cardRoundedCorner),
         onClick = { onClick() }) {
         if (icon != null) {

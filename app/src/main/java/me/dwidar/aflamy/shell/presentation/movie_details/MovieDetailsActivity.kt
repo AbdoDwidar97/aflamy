@@ -106,7 +106,7 @@ fun MovieDetailsPage(viewModel: MovieDetailsViewModel = viewModel(), movieId: In
                     verticalArrangement = Arrangement.Top
                 )
                 {
-                    MovieDetailsInfoSection(movie = state.value.movieDetailsModel)
+                    MovieDetailsInfoSection(movie = state.value.movieDetailsModel, viewModel = viewModel)
 
                     Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
 
@@ -145,7 +145,7 @@ fun MovieDetailsPage(viewModel: MovieDetailsViewModel = viewModel(), movieId: In
 }
 
 @Composable
-fun MovieDetailsInfoSection(movie: MovieDetailsModel)
+fun MovieDetailsInfoSection(movie: MovieDetailsModel, viewModel: MovieDetailsViewModel)
 {
     Column {
         AsyncImage(
@@ -188,7 +188,9 @@ fun MovieDetailsInfoSection(movie: MovieDetailsModel)
 
         Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
 
-        PrimaryButton(title = "Add To Watchlist", icon = Icons.Filled.Favorite) { }
+        PrimaryButton(enabled = viewModel.state.collectAsState().value.watchlist.contains(viewModel.state.collectAsState().value.movieDetailsModel.id), title = "Add To Watchlist", icon = Icons.Filled.Favorite) {
+            viewModel.onIntent(MovieDetailsIntent.OnAddMovieToWatchlist)
+        }
 
         Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
 

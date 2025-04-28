@@ -9,5 +9,6 @@ data class MovieDetailsState(
     val movieDetailsModel: MovieDetailsModel = MovieDetailsModel(),
     val similarMovies: List<MovieModel> = mutableListOf(),
     val actorsCast: List<CastMemberModel> = mutableListOf(),
-    val directorsCast: List<CastMemberModel> = mutableListOf()
+    val directorsCast: List<CastMemberModel> = mutableListOf(),
+    val watchlist: HashMap<Int, MovieModel> = hashMapOf()
 )
