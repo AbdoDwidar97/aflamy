@@ -66,8 +66,23 @@ class MoviesRepoImpl : MoviesRepo
         return Result.failure(Exception("Something went wrong"))
     }
 
-    override suspend fun getMoviesResult(query: String)
+    override suspend fun getMoviesResult(query: String): Result<ListResultModel<MovieModel>>
     {
-        TODO("Not yet implemented")
+        val requestExecutor = RequestExecutor<ListResultResponse<MovieResponse, MovieModel>>()
+        val result = requestExecutor.execute {
+            RetrofitInstance.api.getMoviesSearch(RetrofitInstance.apiToken, query = query)
+        }
+
+        result.onSuccess {
+            return Result.success(it.convertToModel().also { mdl ->
+                it.results?.forEach {
+                    mdl.results.add(it.convertToModel())
+                }
+            })
+        }.onFailure {
+            return Result.failure(it)
+        }
+
+        return Result.failure(Exception("Something went wrong"))
     }
 }

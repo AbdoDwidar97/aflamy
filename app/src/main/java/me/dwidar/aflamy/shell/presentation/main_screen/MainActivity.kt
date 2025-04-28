@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import me.dwidar.aflamy.core.presentation.main_screen.MainScreenIntent
+import me.dwidar.aflamy.shell.presentation.common.NormalMoviesList
 import me.dwidar.aflamy.shell.presentation.movie_details.MovieDetailsActivity
 
 
@@ -49,9 +50,7 @@ class MainActivity : ComponentActivity() {
 fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
     val state = viewModel.state.collectAsState()
 
-    viewModel.onIntent(MainScreenIntent.GetPopularMovies)
-
-    val context = LocalContext.current
+    viewModel.onIntent(MainScreenIntent.OnGetPopularMovies)
 
     AflamyTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
@@ -68,30 +67,64 @@ fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
 
                 Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
 
-                AflamySearchBar("") {}
-
-                Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
-
-                Text("Popular Movies", style = MaterialTheme.typography.titleMedium)
-
-                Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
-
-                if (!state.value.isLoading){
-                    MoviesCollection(
-                        moviesGroup = state.value.moviesGroupByYears,
-                        yearsList = state.value.descendingYears
-                    ){ movieId ->
-                        val intent = Intent(context, MovieDetailsActivity::class.java).apply {
-                            putExtra("movie_id", movieId)
-                        }
-                        context.startActivity(intent)
-                    }
-                }else Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){
-                    CircularProgressIndicator()
+                AflamySearchBar(query = state.value.searchText) { q ->
+                    viewModel.onIntent(MainScreenIntent.OnGetMoviesWithSearch(query = q))
                 }
 
+                Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
+
+                if (state.value.searchText.isEmpty())
+                    PopularMoviesSection(viewModel = viewModel)
+                else MoviesSearchResultSection(viewModel = viewModel)
             }
         }
+    }
+}
+
+@Composable
+fun PopularMoviesSection(viewModel: MainScreenViewModel)
+{
+    val context = LocalContext.current
+
+    Text("Popular Movies", style = MaterialTheme.typography.titleMedium)
+
+    Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
+
+    if (!viewModel.state.collectAsState().value.isLoading){
+        MoviesCollection(
+            moviesGroup = viewModel.state.collectAsState().value.moviesGroupByYears,
+            yearsList = viewModel.state.collectAsState().value.descendingYears
+        ){ movieId ->
+            val intent = Intent(context, MovieDetailsActivity::class.java).apply {
+                putExtra("movie_id", movieId)
+            }
+            context.startActivity(intent)
+        }
+    }else Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun MoviesSearchResultSection(viewModel: MainScreenViewModel)
+{
+    val context = LocalContext.current
+
+    Text("Search Result", style = MaterialTheme.typography.titleMedium)
+
+    Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
+
+    if (!viewModel.state.collectAsState().value.isLoading){
+        NormalMoviesList (
+            movies = viewModel.state.collectAsState().value.moviesSearch
+        ){ movieId ->
+            val intent = Intent(context, MovieDetailsActivity::class.java).apply {
+                putExtra("movie_id", movieId)
+            }
+            context.startActivity(intent)
+        }
+    }else Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){
+        CircularProgressIndicator()
     }
 }
 
