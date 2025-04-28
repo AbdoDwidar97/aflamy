@@ -1,6 +1,7 @@
 package me.dwidar.aflamy.shell.presentation.movie_details
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -81,51 +82,6 @@ fun MovieDetailsPage(viewModel: MovieDetailsViewModel = viewModel(), movieId: In
     viewModel.onIntent(MovieDetailsIntent.OnGetSimilarMovies(movieId = movieId))
     viewModel.onIntent(MovieDetailsIntent.OnGetCasts(movieId = movieId))
 
-    /*val similar : MutableList<MovieModel> = mutableListOf()
-    similar.add(
-        MovieModel(
-            title = "Novocaine",
-            releaseDate = "2025-03-26",
-            posterPath = "https://image.tmdb.org/t/p/w500/xUkUZ8eOnrOnnJAfusZUqKYZiDu.jpg"
-        )
-    )
-    similar.add(
-        MovieModel(
-            title = "Novocaine",
-            releaseDate = "2025-03-26",
-            posterPath = "https://image.tmdb.org/t/p/w500/xUkUZ8eOnrOnnJAfusZUqKYZiDu.jpg"
-        )
-    )
-    similar.add(
-        MovieModel(
-            title = "Novocaine",
-            releaseDate = "2025-03-26",
-            posterPath = "https://image.tmdb.org/t/p/w500/xUkUZ8eOnrOnnJAfusZUqKYZiDu.jpg"
-        )
-    )
-
-    val dirs: MutableList<CastMemberModel> = mutableListOf()
-    dirs.add(CastMemberModel(
-        name = "Jack Quaid",
-        profilePath = "https://image.tmdb.org/t/p/w500/320qW5yEbxpmyxQ3evmClJbtKag.jpg",
-        knownForDepartment = "Actor"
-    ))
-    dirs.add(CastMemberModel(
-        name = "Amber Midthunder",
-        profilePath = "https://image.tmdb.org/t/p/w500/f8VWGyaIS38NkDIzQ2hapXKt0N5.jpg",
-        knownForDepartment = "Actor"
-    ))
-
-    val movie = MovieDetailsModel(
-        title = "Novocaine",
-        releaseDate = "2025-03-26",
-        posterPath = "https://image.tmdb.org/t/p/w780/xUkUZ8eOnrOnnJAfusZUqKYZiDu.jpg",
-        overview = "When the girl of his dreams is kidnapped, everyman Nate turns his inability to feel pain into an unexpected strength in his fight to get her back.",
-        tagline = "Nathan Caine can't feel pain.",
-        revenue = 33561854.0,
-        status = "Released"
-    )*/
-
     AflamyTheme {
         Scaffold(
             topBar = {
@@ -172,7 +128,7 @@ fun MovieDetailsPage(viewModel: MovieDetailsViewModel = viewModel(), movieId: In
 
                     Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
 
-                    CastsSection(directors = state.value.casts, actors = state.value.casts)
+                    CastsSection(directors = state.value.directorsCast, actors = state.value.actorsCast)
 
                     Spacer(modifier = Modifier.height((getHeightUnit() * 3).dp))
                 }
@@ -273,7 +229,7 @@ fun CastsSection(directors: List<CastMemberModel>, actors: List<CastMemberModel>
 
         Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
 
-        CastList(casts = directors)
+        CastList(casts = actors)
     }
 }
 

@@ -8,5 +8,6 @@ data class MovieDetailsState(
     val numberOfRequests: Int = 0,
     val movieDetailsModel: MovieDetailsModel = MovieDetailsModel(),
     val similarMovies: List<MovieModel> = mutableListOf(),
-    val casts: List<CastMemberModel> = mutableListOf()
+    val actorsCast: List<CastMemberModel> = mutableListOf(),
+    val directorsCast: List<CastMemberModel> = mutableListOf()
 )
