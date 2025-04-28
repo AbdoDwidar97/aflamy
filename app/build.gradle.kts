@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("io.realm.kotlin") version "1.4.0" apply true
+    id ("kotlin-kapt")
 }
 
 android {
@@ -28,8 +30,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -51,6 +53,19 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.coil.compose)
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
+
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+
+    implementation(libs.moshi)
+
+    implementation (libs.moshi.kotlin)
+    implementation (libs.converter.moshi)
+
+    implementation(libs.library.base)
+
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

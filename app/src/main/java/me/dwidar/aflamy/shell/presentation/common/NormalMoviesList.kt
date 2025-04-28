@@ -1,11 +1,8 @@
-package me.dwidar.aflamy.shell.presentation.main_screen.components
+package me.dwidar.aflamy.shell.presentation.common
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,14 +11,14 @@ import androidx.compose.ui.unit.dp
 import me.dwidar.aflamy.core.model.movies.MovieModel
 import me.dwidar.aflamy.shell.configs.getHeightUnit
 import me.dwidar.aflamy.shell.configs.getWidthUnit
+import me.dwidar.aflamy.shell.presentation.main_screen.components.MovieCard
 
 @Composable
-fun MoviesGroupItemByYear(year: Int, movies: List<MovieModel>, onCardClick: (movieId: Int) -> Unit) {
-    Column {
-        Text(text = year.toString(), style = MaterialTheme.typography.titleMedium)
-
-        Spacer(modifier = Modifier.height((getHeightUnit() * 2).dp))
-
+fun NormalMoviesList(movies: List<MovieModel>, onCardClick: (movieId: Int) -> Unit)
+{
+    if (movies.isEmpty())
+        Text("No Result", style = MaterialTheme.typography.titleMedium)
+    else {
         FlowRow(
             maxItemsInEachRow = 2,
             verticalArrangement = Arrangement.spacedBy(getHeightUnit().dp),
@@ -33,4 +30,5 @@ fun MoviesGroupItemByYear(year: Int, movies: List<MovieModel>, onCardClick: (mov
             }
         }
     }
+
 }
