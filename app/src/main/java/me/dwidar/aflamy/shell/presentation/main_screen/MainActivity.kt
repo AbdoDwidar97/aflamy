@@ -31,11 +31,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 import me.dwidar.aflamy.core.presentation.main_screen.MainScreenIntent
 import me.dwidar.aflamy.shell.presentation.common.NormalMoviesList
 import me.dwidar.aflamy.shell.presentation.movie_details.MovieDetailsActivity
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

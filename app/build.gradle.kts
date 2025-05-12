@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
     id ("kotlin-kapt")
 }
 
@@ -61,6 +62,12 @@ dependencies {
 
     implementation (libs.moshi.kotlin)
     implementation (libs.converter.moshi)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    implementation (libs.javapoet)
 
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 
