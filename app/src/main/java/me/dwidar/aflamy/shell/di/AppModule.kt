@@ -1,5 +1,6 @@
 package me.dwidar.aflamy.shell.di
 
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

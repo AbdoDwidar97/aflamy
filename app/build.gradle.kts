@@ -68,10 +68,13 @@ dependencies {
     implementation (libs.converter.moshi)
 
     implementation(libs.hilt.android)
+    // implementation(libs.androidx.navigation.compose.jvmstubs)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     implementation (libs.javapoet)
+
+    implementation(libs.androidx.navigation.compose)
 
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 

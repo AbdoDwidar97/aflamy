@@ -39,7 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import dagger.hilt.android.AndroidEntryPoint
 import me.dwidar.aflamy.core.model.casts.CastMemberModel
@@ -76,7 +76,7 @@ class MovieDetailsActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailsPage(viewModel: MovieDetailsViewModel = viewModel(), movieId: Int = -1) {
+fun MovieDetailsPage(viewModel: MovieDetailsViewModel = hiltViewModel(), movieId: Int = -1) {
     val state = viewModel.state.collectAsState()
 
     viewModel.onIntent(MovieDetailsIntent.OnGetMovieDetails(movieId = movieId))
