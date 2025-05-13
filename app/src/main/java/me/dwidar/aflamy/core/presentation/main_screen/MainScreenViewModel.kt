@@ -23,7 +23,36 @@ class MainScreenViewModel @Inject constructor(private val moviesRepo: MoviesRepo
     fun onIntent(intent: MainScreenIntent) {
         when (intent) {
             is MainScreenIntent.OnGetPopularMovies -> onGetPopularMovies()
+            is MainScreenIntent.OnGetNowPlayingMovies -> onGetNowPlayingMovies()
             is MainScreenIntent.OnGetMoviesWithSearch -> onGetMoviesSearchResult(query = intent.query)
+        }
+    }
+
+    private fun onGetNowPlayingMovies()
+    {
+        _state.update {
+            it.copy(isLoading = true)
+        }
+
+        viewModelScope.launch {
+            moviesRepo.getNowPlayingMovies()
+                .onSuccess { result ->
+
+                    val moviesGroupByYears = createMoviesGroupByYears(result.results)
+
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            moviesGroupByYears = moviesGroupByYears,
+                            descendingYears = moviesGroupByYears.keys.toList().sortedDescending()
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _state.update {
+                        it.copy(isLoading = false)
+                    }
+                }
         }
     }
 

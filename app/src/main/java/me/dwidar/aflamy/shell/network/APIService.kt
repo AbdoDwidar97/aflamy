@@ -12,6 +12,9 @@ import retrofit2.http.Query
 interface APIService
 {
     @GET("movie/popular")
+    suspend fun getNowPlayingMovies(@Header("Authorization") token: String): ListResultResponse<MovieResponse, MovieModel>
+
+    @GET("movie/popular")
     suspend fun getPopularMovies(@Header("Authorization") token: String): ListResultResponse<MovieResponse, MovieModel>
 
     @GET("search/movie")

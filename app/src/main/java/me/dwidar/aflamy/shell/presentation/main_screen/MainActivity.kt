@@ -76,10 +76,29 @@ fun MainPage(navController: NavController, viewModel: MainScreenViewModel = hilt
                 Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
 
                 if (state.value.searchText.isEmpty())
-                    PopularMoviesSection(navController = navController, viewModel = viewModel)
+                    NowPlayingMoviesSection(navController = navController, viewModel = viewModel)
                 else MoviesSearchResultSection(viewModel = viewModel, navController = navController)
             }
         }
+    }
+}
+
+@Composable
+fun NowPlayingMoviesSection(navController: NavController, viewModel: MainScreenViewModel)
+{
+    Text("Now Playing", style = MaterialTheme.typography.titleMedium)
+
+    Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
+
+    if (!viewModel.state.collectAsState().value.isLoading){
+        MoviesCollection(
+            moviesGroup = viewModel.state.collectAsState().value.moviesGroupByYears,
+            yearsList = viewModel.state.collectAsState().value.descendingYears
+        ){ movieId ->
+            navController.navigate(route = "details/$movieId")
+        }
+    }else Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){
+        CircularProgressIndicator()
     }
 }
 
