@@ -2,6 +2,7 @@ package me.dwidar.aflamy.core.presentation.main_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,8 +11,10 @@ import kotlinx.coroutines.launch
 import me.dwidar.aflamy.core.model.movies.MovieModel
 import me.dwidar.aflamy.core.repo.movies_repo.MoviesRepo
 import me.dwidar.aflamy.shell.repo.movies_repo.MoviesRepoImpl
+import javax.inject.Inject
 
-class MainScreenViewModel(private val moviesRepo: MoviesRepo = MoviesRepoImpl()) : ViewModel()
+@HiltViewModel
+class MainScreenViewModel @Inject constructor(private val moviesRepo: MoviesRepo) : ViewModel()
 {
     private val _state = MutableStateFlow(MainScreenState())
     val state: StateFlow<MainScreenState> = _state

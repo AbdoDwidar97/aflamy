@@ -1,6 +1,5 @@
 package me.dwidar.aflamy.shell.presentation.main_screen
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,25 +28,28 @@ import me.dwidar.aflamy.shell.presentation.common.AflamySearchBar
 import me.dwidar.aflamy.shell.presentation.main_screen.components.MoviesCollection
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import me.dwidar.aflamy.core.presentation.main_screen.MainScreenIntent
+import me.dwidar.aflamy.shell.navigation.NavigationManager
 import me.dwidar.aflamy.shell.presentation.common.NormalMoviesList
-import me.dwidar.aflamy.shell.presentation.movie_details.MovieDetailsActivity
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
-            MainPage()
+            NavigationManager()
         }
     }
 }
 
 @Composable
-fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
+fun MainPage(navController: NavController, viewModel: MainScreenViewModel = hiltViewModel()) {
     val state = viewModel.state.collectAsState()
 
     viewModel.onIntent(MainScreenIntent.OnGetPopularMovies)
@@ -74,18 +76,16 @@ fun MainPage(viewModel: MainScreenViewModel = viewModel()) {
                 Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
 
                 if (state.value.searchText.isEmpty())
-                    PopularMoviesSection(viewModel = viewModel)
-                else MoviesSearchResultSection(viewModel = viewModel)
+                    PopularMoviesSection(navController = navController, viewModel = viewModel)
+                else MoviesSearchResultSection(viewModel = viewModel, navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun PopularMoviesSection(viewModel: MainScreenViewModel)
+fun PopularMoviesSection(navController: NavController, viewModel: MainScreenViewModel)
 {
-    val context = LocalContext.current
-
     Text("Popular Movies", style = MaterialTheme.typography.titleMedium)
 
     Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
@@ -95,10 +95,7 @@ fun PopularMoviesSection(viewModel: MainScreenViewModel)
             moviesGroup = viewModel.state.collectAsState().value.moviesGroupByYears,
             yearsList = viewModel.state.collectAsState().value.descendingYears
         ){ movieId ->
-            val intent = Intent(context, MovieDetailsActivity::class.java).apply {
-                putExtra("movie_id", movieId)
-            }
-            context.startActivity(intent)
+            navController.navigate(route = "details/$movieId")
         }
     }else Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){
         CircularProgressIndicator()
@@ -106,10 +103,8 @@ fun PopularMoviesSection(viewModel: MainScreenViewModel)
 }
 
 @Composable
-fun MoviesSearchResultSection(viewModel: MainScreenViewModel)
+fun MoviesSearchResultSection(navController: NavController, viewModel: MainScreenViewModel)
 {
-    val context = LocalContext.current
-
     Text("Search Result", style = MaterialTheme.typography.titleMedium)
 
     Spacer(modifier = Modifier.fillMaxHeight(spacerHeight))
@@ -118,10 +113,7 @@ fun MoviesSearchResultSection(viewModel: MainScreenViewModel)
         NormalMoviesList (
             movies = viewModel.state.collectAsState().value.moviesSearch
         ){ movieId ->
-            val intent = Intent(context, MovieDetailsActivity::class.java).apply {
-                putExtra("movie_id", movieId)
-            }
-            context.startActivity(intent)
+            navController.navigate(route = "details/$movieId")
         }
     }else Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){
         CircularProgressIndicator()
@@ -131,5 +123,5 @@ fun MoviesSearchResultSection(viewModel: MainScreenViewModel)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MainPage()
+    MainPage(navController = rememberNavController())
 }

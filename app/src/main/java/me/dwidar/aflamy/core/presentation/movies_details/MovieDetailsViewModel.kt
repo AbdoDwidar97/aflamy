@@ -2,21 +2,22 @@ package me.dwidar.aflamy.core.presentation.movies_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.dwidar.aflamy.core.model.casts.CastMemberModel
 import me.dwidar.aflamy.core.model.casts.DepartmentType
+import me.dwidar.aflamy.core.repo.casts_repo.CastsRepo
 import me.dwidar.aflamy.core.repo.movies_repo.MoviesRepo
-import me.dwidar.aflamy.shell.repo.casts_repo.CastsRepoImpl
-import me.dwidar.aflamy.shell.repo.movies_repo.MoviesRepoImpl
+import javax.inject.Inject
 
-class MovieDetailsViewModel(private val moviesRepo: MoviesRepo = MoviesRepoImpl()) : ViewModel()
+@HiltViewModel
+class MovieDetailsViewModel @Inject constructor(private val moviesRepo: MoviesRepo, private val castsRepo: CastsRepo) : ViewModel()
 {
     private val _state = MutableStateFlow(MovieDetailsState())
     val state: StateFlow<MovieDetailsState> = _state
-    private val castsRepo = CastsRepoImpl()
 
     fun onIntent(intent: MovieDetailsIntent) {
         when (intent) {
