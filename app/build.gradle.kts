@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("io.realm.kotlin") version "1.4.0" apply true
+    alias(libs.plugins.hilt)
     id ("kotlin-kapt")
 }
 
@@ -30,14 +31,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+    }
+
+    hilt {
+        enableAggregatingTask = false
     }
 }
 
@@ -64,6 +69,15 @@ dependencies {
     implementation (libs.converter.moshi)
 
     implementation(libs.library.base)
+
+    implementation(libs.hilt.android)
+    // implementation(libs.androidx.navigation.compose.jvmstubs)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    implementation (libs.javapoet)
+
+    implementation(libs.androidx.navigation.compose)
 
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 

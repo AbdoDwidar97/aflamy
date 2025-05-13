@@ -12,6 +12,26 @@ import me.dwidar.aflamy.shell.network.response.movies.MovieResponse
 
 class MoviesRepoImpl : MoviesRepo
 {
+    override suspend fun getNowPlayingMovies(): Result<ListResultModel<MovieModel>>
+    {
+        val requestExecutor = RequestExecutor<ListResultResponse<MovieResponse, MovieModel>>()
+        val result = requestExecutor.execute {
+            RetrofitInstance.api.getNowPlayingMovies(RetrofitInstance.apiToken)
+        }
+
+        result.onSuccess {
+            return Result.success(it.convertToModel().also { mdl ->
+                it.results?.forEach {
+                    mdl.results.add(it.convertToModel())
+                }
+            })
+        }.onFailure {
+            return Result.failure(it)
+        }
+
+        return Result.failure(Exception("Something went wrong"))
+    }
+
     override suspend fun getPopularMovies(): Result<ListResultModel<MovieModel>>
     {
         val requestExecutor = RequestExecutor<ListResultResponse<MovieResponse, MovieModel>>()

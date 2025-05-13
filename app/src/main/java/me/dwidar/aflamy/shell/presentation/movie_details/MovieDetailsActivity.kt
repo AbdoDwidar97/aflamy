@@ -1,7 +1,6 @@
 package me.dwidar.aflamy.shell.presentation.movie_details
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -40,8 +39,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import dagger.hilt.android.AndroidEntryPoint
 import me.dwidar.aflamy.core.model.casts.CastMemberModel
 import me.dwidar.aflamy.core.model.movies.MovieDetailsModel
 import me.dwidar.aflamy.core.model.movies.MovieModel
@@ -60,6 +60,7 @@ import me.dwidar.aflamy.shell.presentation.common.RowLabel
 import me.dwidar.aflamy.shell.presentation.movie_details.components.CastCard
 import me.dwidar.aflamy.shell.presentation.common.NormalMoviesList
 
+@AndroidEntryPoint
 class MovieDetailsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +76,7 @@ class MovieDetailsActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieDetailsPage(viewModel: MovieDetailsViewModel = viewModel(), movieId: Int = -1) {
+fun MovieDetailsPage(viewModel: MovieDetailsViewModel = hiltViewModel(), movieId: Int = -1) {
     val state = viewModel.state.collectAsState()
 
     viewModel.onIntent(MovieDetailsIntent.OnGetMovieDetails(movieId = movieId))
